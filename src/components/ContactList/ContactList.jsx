@@ -1,19 +1,16 @@
 import { Item } from 'components/ContactItem/ContactItem';
 import { ContactList } from './ContactList.styled';
-import { deleting } from 'redux/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { useContacts } from 'hooks/useContacts';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 export const List = ({ contacts }) => {
-  const filterValue = useSelector(state => state.filter);
-  const filteredContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filterValue.toLowerCase())
+  const { deleteContact } = useContacts();
+
+  const filterValue = useSelector(state => state.contacts.filter);
+
+  const filteredContacts = contacts.filter(contacts =>
+    contacts.name.toLowerCase().includes(filterValue.toLowerCase())
   );
-
-  const dispatch = useDispatch();
-
-  const handleDelete = id => {
-    dispatch(deleting(id));
-  };
 
   return (
     <ContactList>
@@ -23,7 +20,7 @@ export const List = ({ contacts }) => {
           id={contact.id}
           name={contact.name}
           number={contact.number}
-          onDelete={handleDelete}
+          onClick={deleteContact}
         />
       ))}
     </ContactList>
